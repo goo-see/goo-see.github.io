@@ -1,0 +1,94 @@
+<button
+	id="theme-toggle"
+	class="theme-toggle"
+	type="button"
+	aria-label="테마 변경"
+	title="테마 변경"
+>
+	<span class="sun-icon" aria-hidden="true">☀️</span>
+	<span class="moon-icon" aria-hidden="true">🌙</span>
+</button>
+
+<script>
+	function setupThemeToggle() {
+		const button =
+			document.querySelector<HTMLButtonElement>('#theme-toggle');
+
+		const sunIcon =
+			document.querySelector<HTMLElement>('.sun-icon');
+
+		const moonIcon =
+			document.querySelector<HTMLElement>('.moon-icon');
+
+		if (!button || !sunIcon || !moonIcon) {
+			return;
+		}
+
+		function updateIcon() {
+			const isDark =
+				document.documentElement.classList.contains('dark');
+
+			/*
+			 * 현재 다크모드라면
+			 * 버튼에는 ☀️를 보여준다.
+			 *
+			 * 즉 "라이트 모드로 바꿀 수 있다"는 의미.
+			 */
+			sunIcon.style.display = isDark ? 'inline' : 'none';
+			moonIcon.style.display = isDark ? 'none' : 'inline';
+		}
+
+		button.addEventListener('click', () => {
+			const isDark =
+				document.documentElement.classList.toggle('dark');
+
+			localStorage.setItem(
+				'theme',
+				isDark ? 'dark' : 'light'
+			);
+
+			updateIcon();
+		});
+
+		updateIcon();
+	}
+
+	setupThemeToggle();
+</script>
+
+<style>
+	.theme-toggle {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		width: 40px;
+		height: 40px;
+
+		padding: 0;
+
+		border: 1px solid var(--border);
+		border-radius: 10px;
+
+		background: var(--bg-secondary);
+		color: var(--text);
+
+		font-size: 18px;
+		line-height: 1;
+
+		cursor: pointer;
+
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease,
+			transform 0.15s ease;
+	}
+
+	.theme-toggle:hover {
+		transform: translateY(-1px);
+	}
+
+	.theme-toggle:active {
+		transform: translateY(0);
+	}
+</style>
