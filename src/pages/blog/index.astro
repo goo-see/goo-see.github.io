@@ -1,114 +1,279 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
+
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+function formatDate(date: Date) {
+	const year = date.getUTCFullYear();
+	const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+	const day = String(date.getUTCDate()).padStart(2, '0');
+
+	return `${year}.${month}.${day}`;
+}
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
+		<BaseHead
+			title={`Blog | ${SITE_TITLE}`}
+			description={SITE_DESCRIPTION}
+		/>
 	</head>
+
 	<body>
 		<Header />
-		<main>
-			<section>
-				<ul>
-					{
+
+		<main class="blog-page">
+			<header class="blog-header">
+				<p class="blog-label">BLOG</p>
+
+				<h1>개발 기록</h1>
+
+				<p class="blog-description">
+					개발하면서 직접 해본 것과 막혔던 부분을 기록합니다.
+				</p>
+			</header>
+
+			<section class="post-list">
+				{
+					posts.length === 0 ? (
+						<p class="empty-message">
+							아직 작성된 글이 없습니다.
+						</p>
+					) : (
 						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
+							<article class="post-item">
+								<a
+									class="post-link"
+									href={`/blog/${post.id}/`}
+								>
+									<div class="post-meta">
+										<span class="category">
+											개발일지
+										</span>
+
+										<span class="meta-divider">
+											·
+										</span>
+
+										<time datetime={post.data.pubDate.toISOString()}>
+											{formatDate(post.data.pubDate)}
+										</time>
+									</div>
+
+									<h2>{post.data.title}</h2>
+
+									<p class="post-description">
+										{post.data.description}
 									</p>
+
+									<span class="read-more">
+										글 읽기 →
+									</span>
 								</a>
-							</li>
+							</article>
 						))
-					}
-				</ul>
+					)
+				}
 			</section>
 		</main>
+
 		<Footer />
 	</body>
 </html>
+
+<style is:global>
+	.blog-page {
+		width: 720px;
+		max-width: calc(100% - 2rem);
+		margin: 0 auto;
+		padding: 3.5rem 0 5rem;
+	}
+
+	/* Blog Header */
+
+	.blog-page .blog-header {
+		margin-bottom: 3rem;
+	}
+
+	.blog-page .blog-label {
+		margin: 0 0 0.6rem;
+
+		color: var(--accent);
+
+		font-size: 12px;
+		font-weight: 700;
+		line-height: 1.4;
+
+		letter-spacing: 0.12em;
+	}
+
+	.blog-page .blog-header h1 {
+		margin: 0 0 0.8rem;
+
+		color: var(--text);
+
+		font-size: 30px;
+		font-weight: 750;
+		line-height: 1.35;
+
+		letter-spacing: -0.03em;
+	}
+
+	.blog-page .blog-description {
+		margin: 0;
+
+		color: var(--text-secondary);
+
+		font-size: 15px;
+		line-height: 1.7;
+	}
+
+	/* Post List */
+
+	.blog-page .post-list {
+		border-top: 1px solid var(--border);
+	}
+
+	.blog-page .post-item {
+		margin: 0;
+		padding: 0;
+
+		border-bottom: 1px solid var(--border);
+	}
+
+	.blog-page .post-link {
+		display: block;
+
+		padding: 1.8rem 0;
+
+		color: var(--text);
+
+		text-decoration: none;
+
+		transition:
+			transform 0.15s ease,
+			opacity 0.15s ease;
+	}
+
+	.blog-page .post-link:hover {
+		color: var(--text);
+		text-decoration: none;
+
+		transform: translateX(3px);
+	}
+
+	/* Meta */
+
+	.blog-page .post-meta {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+
+		margin-bottom: 0.6rem;
+
+		color: var(--text-secondary);
+
+		font-size: 12px;
+		line-height: 1.4;
+	}
+
+	.blog-page .category {
+		color: var(--accent);
+		font-weight: 700;
+	}
+
+	.blog-page .meta-divider {
+		color: var(--text-secondary);
+	}
+
+	/* Post Title */
+
+	.blog-page .post-item h2 {
+		margin: 0 0 0.6rem;
+
+		color: var(--text);
+
+		font-size: 21px;
+		font-weight: 700;
+		line-height: 1.45;
+
+		letter-spacing: -0.02em;
+
+		word-break: keep-all;
+	}
+
+	.blog-page .post-description {
+		max-width: 650px;
+
+		margin: 0 0 0.8rem;
+
+		color: var(--text-secondary);
+
+		font-size: 14px;
+		line-height: 1.7;
+
+		word-break: keep-all;
+	}
+
+	.blog-page .read-more {
+		color: var(--text-secondary);
+
+		font-size: 12px;
+		line-height: 1.4;
+	}
+
+	.blog-page .post-link:hover .read-more {
+		color: var(--accent);
+	}
+
+	/* Empty */
+
+	.blog-page .empty-message {
+		padding: 2rem 0;
+
+		color: var(--text-secondary);
+
+		font-size: 14px;
+	}
+
+	/* Mobile */
+
+	@media (max-width: 720px) {
+		.blog-page {
+			max-width: calc(100% - 2rem);
+
+			padding-top: 2.5rem;
+			padding-bottom: 4rem;
+		}
+
+		.blog-page .blog-header {
+			margin-bottom: 2.5rem;
+		}
+
+		.blog-page .blog-header h1 {
+			font-size: 26px;
+		}
+
+		.blog-page .post-link {
+			padding: 1.5rem 0;
+		}
+
+		.blog-page .post-item h2 {
+			font-size: 19px;
+		}
+
+		.blog-page .post-description {
+			font-size: 13px;
+		}
+	}
+</style>

@@ -1,73 +1,66 @@
 ---
 title: 'GitHub Pages + Astro로 무료 개발 블로그 만들기 (1) — 시작과 첫 배포'
-description: 'GitHub Pages와 Astro를 이용해 무료 개발 블로그를 만들고 첫 배포까지 진행합니다.'
+description: 'GitHub Pages와 Astro를 이용해 무료 개발 블로그를 만들고 첫 배포까지 진행해보자'
 pubDate: '2026-08-25'
 ---
 
-# GitHub Pages + Astro로 무료 개발 블로그 만들기 (1) — 시작과 첫 배포
+안녕하세요 구씨입니다.
 
-개발을 하다 보면 해결했던 문제나 새롭게 알게 된 내용을 어디엔가 정리하고 싶을 때가 있다.
+그동안 개발하면서 메모나 문서로만 남길 뿐, 지나고나면 기억하지 못하는게 많아서 정리해볼까 한다.
 
-나 역시 기술적인 내용을 기록할 공간이 필요했고, 이번 기회에 직접 개발 블로그를 만들어보기로 했다.
+그래도 이왕이면 개발자인데 Git을 써보는게 어떠한가!! 하고! 진행해보고자 합니다.
 
-블로그를 만드는 방법은 다양하지만 이번에는 다음 조합을 사용한다.
+별도의 서버를 띄워서 관리할 필요가 없고, 로컬에서 글이나 코드를 수정한 뒤 GitHub에 Push하면 배포까지 자동으로 이어지게 만들 수 있다는 방법이 있다고하니! 진행합니다~
 
-- GitHub Pages
-- Astro
-- GitHub Actions
-- Markdown
+이번 글에서는 아무것도 없는 상태에서 GitHub Pages 저장소를 만들고, Astro를 설치한 뒤 실제 인터넷 주소로 접속하는 것까지 진행한다.
 
-별도의 서버를 운영하지 않아도 되고, GitHub에 코드를 Push하면 블로그가 자동으로 배포되는 구조다.
-
-이번 글에서는 가장 먼저 GitHub Pages 저장소를 만들고 Astro 블로그를 실제 인터넷에 배포하는 과정까지 진행한다.
-
-최종적으로 아래와 같은 주소를 만드는 것이 목표다.
+최종 목표는 단순하게! git을 활용한 나만의 블로그를 만들어보자~
 
 ```text
 https://<username>.github.io
-```
+````
 
 ---
 
-## 1. GitHub Pages가 뭔가?
+## 1. GitHub Pages부터 시작하기
 
-GitHub Pages는 GitHub 저장소에 있는 정적 웹사이트를 인터넷에 공개할 수 있도록 해주는 기능이다.
+GitHub Pages는 GitHub 저장소에 있는 정적 사이트를 웹에 공개할 수 있게 해주는 기능이다.
 
-개인 사용자 사이트를 만들 경우 저장소 이름을 다음 규칙으로 생성한다.
+개인 블로그처럼 사용자 사이트를 만들 때는 저장소 이름에도 규칙이 있다.
 
 ```text
 <GitHub username>.github.io
 ```
 
-예를 들어 GitHub 아이디가 아래와 같다면,
+예를 들어 GitHub 아이디가 다음과 같다면,
 
 ```text
-devlogu-test
+goo-see
 ```
 
-저장소 이름은 다음과 같다.
+저장소 이름은:
 
 ```text
-devlogu-test.github.io
+goo-see.github.io
 ```
 
-그리고 최종 사이트 주소는:
+가 되고, 최종 주소도 그대로:
 
 ```text
-https://devlogu-test.github.io
+https://goo-see.github.io
 ```
 
 가 된다.
 
-GitHub Free 계정을 사용한다면 GitHub Pages를 사용할 저장소를 Public으로 생성하면 된다.
+처음에는 저장소 이름을 아무렇게나 만들어도 되는 줄 알았는데, `<username>.github.io` 형태로 바로 접근하고 싶다면 이 규칙을 맞춰주는 게 중요하다.
 
 ---
 
 ## 2. GitHub Pages 저장소 만들기
 
-GitHub 우측 상단의 `+` 버튼을 누르고 **New repository**를 선택한다.
+GitHub 우측 상단의 `+` 버튼을 누르고 New repository를 선택한다.
 
-> [이미지 1 — GitHub의 New repository 메뉴를 선택하는 화면]
+<!-- 이미지 1: GitHub 우측 상단 + → New repository 선택 화면 -->
 
 Repository name에는 자신의 GitHub 아이디 뒤에 `.github.io`를 붙인다.
 
@@ -75,13 +68,7 @@ Repository name에는 자신의 GitHub 아이디 뒤에 `.github.io`를 붙인�
 <username>.github.io
 ```
 
-예:
-
-```text
-devlogu-test.github.io
-```
-
-이번에는 로컬에서 프로젝트를 생성할 예정이므로 아래 옵션은 추가하지 않는다.
+설정은 다음과 같이 두었다.
 
 ```text
 Visibility     Public
@@ -90,69 +77,69 @@ README         Off
 License        None
 ```
 
-> [이미지 2 — `<username>.github.io` 저장소 생성 설정 화면]
+<!-- 이미지 2: devlogu-test.github.io 저장소 생성 설정 화면 -->
 
-설정을 확인한 뒤 **Create repository**를 누른다.
+이번에는 로컬에서 Astro 프로젝트를 직접 만들 예정이라 README나 `.gitignore` 같은 파일은 미리 생성하지 않았다.
 
-저장소가 만들어졌다면 첫 번째 단계는 끝이다.
+설정을 확인하고 Create repository를 누른다.
+
+여기까지 하면 일단 GitHub 쪽 빈 공간은 준비됐다.
 
 ---
 
-## 3. 저장소를 로컬로 Clone하기
+## 3. 저장소를 로컬로 가져오기
 
 이제 방금 만든 저장소를 내 컴퓨터로 가져온다.
 
-터미널을 열고 프로젝트를 둘 위치로 이동한다.
-
-나는 Desktop을 사용했다.
+나는 Desktop 아래에 프로젝트를 두기로 했다.
 
 ```bash
 cd ~/Desktop
 ```
 
-GitHub 저장소를 Clone한다.
+그리고 저장소를 Clone한다.
 
 ```bash
 git clone https://github.com/<username>/<username>.github.io.git
 ```
 
-예를 들면:
+테스트 계정이라면:
 
 ```bash
 git clone https://github.com/devlogu-test/devlogu-test.github.io.git
 ```
 
-그리고 Clone된 폴더로 이동한다.
+Clone이 끝났으면 해당 폴더로 이동한다.
 
 ```bash
 cd devlogu-test.github.io
 ```
 
-빈 저장소를 Clone했기 때문에 다음과 같은 경고가 보일 수도 있다.
+빈 저장소를 Clone했기 때문에 다음과 같은 메시지가 나올 수도 있다.
 
 ```text
 warning: You appear to have cloned an empty repository.
 ```
 
-문제가 발생한 것이 아니다.
+에러는 아니다.
 
-아직 저장소에 아무 파일도 없기 때문에 나오는 정상적인 메시지다.
+정말 빈 저장소라서 나오는 메시지라 그냥 넘어가면 된다.
 
 ---
 
-## 4. Astro Blog 프로젝트 설치하기
+## 4. Astro Blog 설치하기
 
-이번 블로그에는 Astro를 사용한다.
+프레임워크는 Astro를 선택했다.
 
-Astro는 정적 사이트와 블로그를 만들기에 적합한 웹 프레임워크이며 Markdown 기반 콘텐츠도 쉽게 관리할 수 있다.
+블로그 글을 Markdown으로 관리할 수 있고, GitHub Pages에 올릴 정적 사이트를 만들기에도 구조가 단순해 보여서 선택했다.
 
-현재 GitHub 저장소 폴더 안에서 다음 명령어를 실행한다.
+현재 `devlogu-test.github.io` 폴더 안에서 다음 명령어를 실행한다.
 
 ```bash
 npm create astro@latest -- --template blog
 ```
 
-처음 실행한다면 `create-astro` 설치 여부를 물어볼 수 있다.
+처음 실행하면 `create-astro` 설치 여부를 물어볼 수 있다.
 
 ```text
 Need to install the following packages:
@@ -161,19 +148,19 @@ create-astro@...
 Ok to proceed? (y)
 ```
 
-`y`를 입력한다.
+이 경우 `y`를 입력한다.
 
----
+### 프로젝트 위치는 `.`으로 지정하기
 
-### 프로젝트 위치는 반드시 `.`으로 지정한다
+여기서 한 가지 주의할 부분이 있다.
 
-설치 과정에서 다음과 비슷한 질문이 나온다.
+설치 과정에서 다음과 같이 프로젝트를 어디에 만들지 물어본다.
 
 ```text
 Where should we create your new project?
 ```
 
-여기서 새로운 폴더명을 입력하지 않고:
+여기에는 새로운 폴더명을 입력하지 않고:
 
 ```text
 .
@@ -181,12 +168,12 @@ Where should we create your new project?
 
 을 입력한다.
 
-`.`은 **현재 폴더**를 의미한다.
+`.`은 현재 폴더를 의미한다.
 
-즉 다음 구조를 만들기 위한 것이다.
+우리가 원하는 구조는 이렇다.
 
 ```text
-<username>.github.io/
+devlogu-test.github.io/
 ├── package.json
 ├── astro.config.mjs
 ├── public/
@@ -194,9 +181,25 @@ Where should we create your new project?
 └── ...
 ```
 
-> [이미지 3 — Astro 설치 마법사에서 프로젝트 위치를 `.`으로 입력하는 화면]
+<!-- 이미지 3: Astro 설치 과정에서 프로젝트 위치를 . 으로 입력한 화면 -->
 
-의존성 설치 여부를 물어보면:
+여기서 별도의 프로젝트명을 입력하면:
+
+```text
+devlogu-test.github.io/
+└── some-project/
+    ├── package.json
+    ├── src/
+    └── ...
+```
+
+처럼 한 단계 아래에 프로젝트가 생길 수 있다.
+
+그러면 나중에 상위 폴더에서 `npm run dev`를 실행했을 때 `package.json`을 찾지 못하는 상황이 생긴다.
+
+처음 만들 때 은근히 헷갈릴 수 있는 부분이라 그냥 `.`을 기억해두는 게 편하다.
+
+의존성 설치 여부는:
 
 ```text
 Install dependencies?
@@ -204,19 +207,19 @@ Install dependencies?
 
 `Yes`를 선택한다.
 
-이미 GitHub 저장소를 Clone했기 때문에 Git 저장소 초기화를 묻는다면 새로 초기화할 필요가 없다.
+이미 GitHub 저장소를 Clone해둔 상태라 Git 초기화를 다시 물어본다면:
 
 ```text
 Initialize a new git repository?
 ```
 
-`No`를 선택한다.
+`No`를 선택하면 된다.
 
 ---
 
-## 5. 프로젝트 구조 확인하기
+## 5. 프로젝트가 제대로 만들어졌는지 확인하기
 
-Astro 설치가 끝났다면 현재 디렉터리를 확인해본다.
+설치가 끝났으면 현재 폴더를 확인해본다.
 
 ```bash
 ls
@@ -234,18 +237,12 @@ src
 tsconfig.json
 ```
 
-특히 중요한 것은:
+여기서 가장 먼저 확인한 건 `package.json`이다.
+
+정상이라면:
 
 ```text
-package.json
-```
-
-이 현재 `<username>.github.io` 폴더 바로 아래에 존재하는지 확인하는 것이다.
-
-정상적인 구조:
-
-```text
-<username>.github.io/
+devlogu-test.github.io/
 ├── .git/
 ├── package.json
 ├── src/
@@ -253,31 +250,41 @@ package.json
 └── astro.config.mjs
 ```
 
+처럼 저장소 바로 아래에 있어야 한다.
+
+이 구조만 맞으면 일단 다음 단계로 넘어가도 된다.
+
 ---
 
-## 6. Astro 블로그를 로컬에서 실행해보기
+## 6. localhost에서 먼저 실행해보기
 
-이제 실제로 블로그가 동작하는지 확인한다.
+이제 블로그가 실제로 실행되는지 확인한다.
 
 ```bash
 npm run dev
 ```
 
-정상적으로 실행되면 터미널에 다음과 비슷한 주소가 표시된다.
+정상적으로 실행되면 터미널에 다음과 비슷하게 표시된다.
+
+```text
+Local    http://localhost:4321/
+```
+
+브라우저에서:
 
 ```text
 http://localhost:4321/
 ```
 
-브라우저에서 해당 주소로 접속한다.
+로 접속한다.
 
-> [이미지 4 — Astro 기본 Blog Template이 localhost:4321에서 실행된 화면]
+<!-- 이미지 4: localhost:4321에서 Astro 기본 Blog Template이 열린 화면 -->
 
-Astro Blog 화면이 나타났다면 로컬 개발 환경 구축은 성공이다.
+Astro 기본 블로그 화면이 보인다면 여기까지는 성공이다.
 
-이 단계에서는 아직 인터넷에 블로그가 공개된 것이 아니다.
+아직 인터넷에 공개된 건 아니다.
 
-현재 구조는:
+현재 상태는 딱:
 
 ```text
 내 컴퓨터
@@ -285,13 +292,13 @@ Astro Blog 화면이 나타났다면 로컬 개발 환경 구축은 성공이다
 localhost:4321
 ```
 
-까지만 가능한 상태다.
+까지만 접근할 수 있는 상태다.
 
-이제 이것을 GitHub Pages에 배포한다.
+이제 이걸 GitHub Pages까지 연결하면 된다.
 
 ---
 
-## 7. Astro에 사이트 주소 설정하기
+## 7. Astro에 실제 사이트 주소 알려주기
 
 프로젝트 루트에 있는:
 
@@ -301,7 +308,7 @@ astro.config.mjs
 
 파일을 연다.
 
-사이트 주소를 다음과 같이 설정한다.
+그리고 `site`에 실제 GitHub Pages 주소를 넣는다.
 
 ```js
 import { defineConfig } from 'astro/config';
@@ -311,7 +318,7 @@ export default defineConfig({
 });
 ```
 
-예:
+테스트 계정 기준으로는:
 
 ```js
 import { defineConfig } from 'astro/config';
@@ -321,33 +328,37 @@ export default defineConfig({
 });
 ```
 
-이번처럼 `<username>.github.io` 사용자 사이트를 만드는 경우 별도의 프로젝트 경로를 붙일 필요가 없다.
+처럼 작성했다.
+
+이번처럼 저장소 자체가 `<username>.github.io`인 사용자 사이트라면 별도의 `/blog` 같은 경로는 붙이지 않았다.
 
 ---
 
-## 8. GitHub Actions 배포 설정 만들기
+## 8. GitHub Actions로 자동 배포 준비하기
 
-우리는 앞으로 블로그 글이나 코드를 수정한 뒤:
+여기까지 만들었으면 직접 배포할 수도 있지만, 매번 수동으로 작업하고 싶지는 않았다.
+
+앞으로는:
 
 ```bash
 git push
 ```
 
-만 하면 자동으로 사이트가 배포되도록 만들 것이다.
+만 하면 알아서 빌드하고 GitHub Pages까지 배포되도록 GitHub Actions를 붙인다.
 
-먼저 GitHub Actions 설정 폴더를 만든다.
+먼저 Workflow 폴더를 만든다.
 
 ```bash
 mkdir -p .github/workflows
 ```
 
-그리고 배포 설정 파일을 생성한다.
+배포 파일도 생성한다.
 
 ```bash
 touch .github/workflows/deploy.yml
 ```
 
-`deploy.yml`에 다음 내용을 작성한다.
+`deploy.yml`에는 다음 내용을 넣었다.
 
 ```yaml
 name: Deploy to GitHub Pages
@@ -388,51 +399,55 @@ jobs:
         uses: actions/deploy-pages@v5
 ```
 
-이 설정은 간단히 말하면:
+처음 보면 조금 복잡해 보이는데, 지금 필요한 흐름만 보면 단순하다.
 
 ```text
 main 브랜치에 Push
         ↓
-Astro 프로젝트 Build
+Astro Build
         ↓
-GitHub Pages에 결과 업로드
+빌드 결과 업로드
         ↓
-사이트 배포
+GitHub Pages 배포
 ```
 
-를 자동으로 수행한다.
+GitHub Actions의 세부 구조는 다음 글에서 조금 더 자세히 볼 예정이다.
+
+이번에는 일단 자동 배포가 되는 상태까지만 만든다.
 
 ---
 
-## 9. 배포 전에 로컬 Build 확인하기
+## 9. Push하기 전에 로컬 Build 확인하기
 
-바로 Push하기 전에 Production Build가 정상적으로 만들어지는지 확인한다.
+바로 GitHub에 올리기 전에 한 번 확인해보는 게 좋다.
 
 ```bash
 npm run build
 ```
 
-정상적으로 완료되면 마지막 부분에 다음과 비슷한 메시지가 나타난다.
+정상적으로 끝나면 마지막 부분에:
 
 ```text
 [build] Complete!
 ```
 
-그리고 프로젝트 내부에:
+비슷한 메시지가 표시된다.
+
+프로젝트에는:
 
 ```text
 dist/
 ```
 
-폴더가 생성된다.
+폴더도 생성된다.
 
-이 폴더 안의 결과물이 실제 GitHub Pages에 배포된다.
+`npm run dev`가 개발 중 화면을 확인하는 용도라면, `npm run build`는 실제 배포할 결과물이 정상적으로 만들어지는지 확인하는 과정이라고 보면 된다.
+
+여기까지 문제없으면 이제 Push한다.
 
 ---
 
 ## 10. 첫 Commit과 Push
-
-이제 현재 프로젝트를 GitHub에 올린다.
 
 먼저 변경된 파일을 확인한다.
 
@@ -440,7 +455,7 @@ dist/
 git status
 ```
 
-전체 파일을 Stage에 추가한다.
+파일을 Stage에 올리고:
 
 ```bash
 git add .
@@ -452,13 +467,15 @@ git add .
 git commit -m "feat: initialize Astro blog"
 ```
 
-그리고 GitHub에 Push한다.
+이제 GitHub에 Push한다.
 
 ```bash
 git push origin main
 ```
 
-이 순간부터 앞으로 꽤 자주 보게 될 흐름이 시작된다.
+처음 직접 해보고 가장 신기했던 부분이 여기였다.
+
+앞으로는 로컬에서 작업한 뒤 Push만 하면:
 
 ```text
 Local 작업
@@ -469,22 +486,24 @@ git push
     ↓
 GitHub Actions
     ↓
-GitHub Pages 자동 배포
+GitHub Pages 배포
 ```
+
+까지 자동으로 이어지게 된다.
 
 ---
 
-## 11. GitHub Pages의 Source를 GitHub Actions로 설정하기
+## 11. GitHub Pages 배포 방식을 Actions로 변경하기
 
-GitHub에서 방금 만든 저장소로 이동한다.
+GitHub 저장소로 돌아간다.
 
-상단 메뉴에서:
+상단의:
 
 ```text
 Settings
 ```
 
-로 이동하고 왼쪽 메뉴에서:
+로 들어간 다음 왼쪽 메뉴에서:
 
 ```text
 Pages
@@ -492,23 +511,23 @@ Pages
 
 를 선택한다.
 
-`Build and deployment` 항목의 Source를:
+`Build and deployment`의 Source를:
 
 ```text
 GitHub Actions
 ```
 
-로 설정한다.
+로 변경한다.
 
-> [이미지 5 — Settings → Pages → Source를 GitHub Actions로 선택한 화면]
+<!-- 이미지 5: Settings → Pages → Source를 GitHub Actions로 선택한 화면 -->
 
-이제 GitHub가 우리가 만든 `deploy.yml`을 통해 사이트를 배포할 수 있다.
+이제 우리가 만든 `deploy.yml`이 실제 GitHub Pages 배포를 담당한다.
 
 ---
 
-## 12. GitHub Actions 확인하기
+## 12. Actions에서 배포 상태 확인하기
 
-Repository 상단의:
+저장소 상단의:
 
 ```text
 Actions
@@ -516,30 +535,36 @@ Actions
 
 탭으로 이동한다.
 
-우리가 만든:
+정상이라면 우리가 만든:
 
 ```text
 Deploy to GitHub Pages
 ```
 
-Workflow가 실행되고 있을 것이다.
+Workflow가 실행되고 있다.
 
-정상적으로 완료되면:
+완료됐을 때:
 
 ```text
 build   ✅
 deploy  ✅
 ```
 
-두 작업 모두 초록색 체크가 나타난다.
+두 단계 모두 초록색이면 성공이다.
 
-> [이미지 6 — GitHub Actions에서 build와 deploy가 성공한 화면]
+<!-- 이미지 6: GitHub Actions의 build / deploy가 모두 성공한 화면 -->
+
+만약 여기서 빨간색으로 실패한다면 사이트에 접속하기 전에 먼저 Actions 로그를 확인해야 한다.
+
+나도 실제로 블로그를 만들면서 이 부분에서 한 번 막혔는데, 그 내용은 다음 글에 따로 정리하려고 한다.
 
 ---
 
-## 13. 드디어 블로그 접속하기
+## 13. 실제 GitHub Pages 주소로 접속하기
 
-이제 브라우저에서:
+이제 마지막이다.
+
+브라우저에서:
 
 ```text
 https://<username>.github.io
@@ -547,54 +572,48 @@ https://<username>.github.io
 
 로 접속한다.
 
-예:
+테스트 계정이라면:
 
 ```text
 https://devlogu-test.github.io
 ```
 
-Astro 기본 블로그 화면이 나타난다면 첫 배포에 성공한 것이다.
+다.
 
-> [이미지 7 — 실제 `<username>.github.io` 주소에서 Astro Blog가 열린 화면]
+<!-- 이미지 7: 실제 devlogu-test.github.io에서 Astro Blog가 열린 화면 -->
 
-여기서 개인적으로 가장 신기했던 부분은 이것이었다.
+localhost에서 봤던 Astro 기본 블로그가 실제 인터넷 주소에서도 뜬다면 첫 배포까지 완료된 것이다.
 
-로컬에서 수정하고:
+처음에는 GitHub Pages라고 해서 GitHub 안에서 뭔가 직접 글을 작성하는 방식인 줄 알았는데, 실제로 사용해보니 그냥 Git으로 사이트 전체를 관리하는 구조에 가까웠다.
 
-```bash
-git add .
-git commit
-git push
-```
-
-하면 GitHub Actions가 자동으로 사이트를 다시 Build하고 배포한다.
-
-별도의 서버에 접속해서 파일을 복사하거나 직접 배포 명령을 실행하지 않아도 된다.
-
-앞으로 블로그를 수정하는 기본 작업 방식은 결국:
+앞으로 블로그를 수정하는 과정도:
 
 ```text
-코드 수정
-   ↓
+코드 또는 글 수정
+        ↓
 localhost에서 확인
-   ↓
+        ↓
+git commit
+        ↓
 git push
-   ↓
+        ↓
 실제 블로그 자동 반영
 ```
 
-이 된다.
+이 흐름으로 반복하게 된다.
+
+생각보다 단순했다.
 
 ---
 
 ## 마무리
 
-이번 글에서는 아무것도 없는 상태에서:
+이번에는 아무것도 없는 상태에서:
 
 ```text
 GitHub Pages 저장소 생성
         ↓
-Astro Blog 설치
+Astro 설치
         ↓
 localhost 실행
         ↓
@@ -602,15 +621,17 @@ GitHub Actions 설정
         ↓
 첫 Commit / Push
         ↓
-GitHub Pages 첫 배포
+실제 GitHub Pages 배포
 ```
 
 까지 진행했다.
 
-아직 화면은 Astro 기본 Blog Template 그대로다.
+아직 사이트 자체는 Astro 기본 템플릿 그대로다.
 
-다음 글에서는 GitHub Actions의 자동 배포 구조와 배포 과정에서 발생할 수 있는 문제를 조금 더 자세히 살펴본다.
+그래도 일단 로컬에서 작업한 결과가 Push만으로 실제 사이트에 반영되는 환경은 만들어졌다.
 
-**다음 글**
+다음 글에서는 이번 과정에서 조금 대충 넘어간 GitHub Actions를 다시 살펴보고, 실제로 배포가 실패했을 때 어디부터 확인하면 되는지도 같이 정리해보려고 한다.
+
+### 다음 글
 
 `GitHub Pages + Astro로 무료 개발 블로그 만들기 (2) — GitHub Actions 자동 배포`
