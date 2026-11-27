@@ -3,6 +3,10 @@
 icon: fas fa-info-circle
 order: 4
 ---
+## 안녕하세요, AI 엔지니어 구성준 입니다.
 
-> Add Markdown syntax content to file `_tabs/about.md`{: .filepath } and it will show up on this page.
-{: .prompt-tip }
+저는 연구와 구현을 연결해 결과물을 만드는 AI 엔지니어입니다.
+
+## 링크
+
+- [GitHub](https://github.com/goo-see)
