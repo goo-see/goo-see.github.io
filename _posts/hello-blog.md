@@ -1,7 +1,7 @@
 ---
 title: "첫 블로그 게시글을 환영합니다."
 categories : [일상, 블로그]
-tag : [기록]
+tags : [기록]
 description : "첫 블로그 게시글"
 ---
 
