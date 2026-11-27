@@ -1,7 +1,7 @@
 ---
 title: "첫 블로그 게시글을 환영합니다."
 date : 2026-11-27 15:00:00
-categories : [카테고리, 일상]
+categories : [일상, 블로그]
 tag : [기록]
 description : "첫 블로그 게시글"
 ---
